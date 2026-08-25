@@ -1,4 +1,4 @@
-- 👋 Hi, I’m @Colin-T-Barker, currently an Instructor of Mathematics & Computer Science at Drury University, Springfield, MO, USA.
+- 👋 Hi, I’m @Colin-T-Barker, currently an Assistant Professor of Mathematics & Computer Science at Drury University, Springfield, MO, USA.
 - 👀 I’m interested in Sports Stats Data & Analytics, Stochastic Differential Equations Modeling, Disease Modeling, Lie Group Theory
 - 🌱 I’m currently learning How to prove positivity of systems of SDEs
 - 💞️ I’m looking to collaborate on anything
