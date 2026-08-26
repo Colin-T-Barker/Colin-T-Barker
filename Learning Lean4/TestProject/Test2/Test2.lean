@@ -40,3 +40,31 @@ def h: Nat → Nat → Nat := fun x y => x^2 + y^2
 #eval Nat.add 5 2
 #eval (5, 9).1 /- extracts the first component -/
 #eval (5, 9).2 /- extracts the second component -/
+
+/- checking types -/
+#check Nat
+#check Bool
+#check Nat → Bool
+#check Nat × Bool
+#check Nat → Nat
+#check Nat × Nat → Nat
+#check Nat → Nat → Nat
+#check Nat → (Nat → Nat)
+#check Nat → Nat → Bool
+#check (Nat → Nat) → Nat
+
+#check Prod
+
+/- Using lambda functions-/
+#eval (λ x : Nat => x + 5) 15 -- lambda and function mean the same thing
+
+/- Note: Lean is a complete programming language.
+It has a compiler that generates a binary executable and an interactive interpreter.
+You can use the command #eval to execute expressions,
+and it is the preferred way of testing your functions.-/
+
+def double (x : Nat) : Nat := -- the name is 'double', input type is Nat, output type is Nat
+  x + x
+/- The following does the same thing: -/
+def double2 :=
+  fun (x : Nat) => x + x
