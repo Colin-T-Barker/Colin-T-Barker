@@ -68,3 +68,35 @@ def double (x : Nat) : Nat := -- the name is 'double', input type is Nat, output
 /- The following does the same thing: -/
 def double2 :=
   fun (x : Nat) => x + x
+
+/- even more doubling and then some-/
+def add (x : Nat) (y : Nat) :=
+  x + y
+
+#eval add (double 2) (5 + 7)
+
+/- A good rule is to type-annotate for definitions and functions-/
+def Pavlov (x  y n: Nat) : Nat :=
+  (x+y)^n
+
+#check Pavlov
+#eval Pavlov 2 3 4
+
+/- onto if thens -/
+def greater (x y : Nat) : Nat :=
+  if x > y then x
+  else y
+
+#check greater
+#eval greater 5 10
+
+/- Time for function composition -/
+def compose (α β γ : Type) (g : β → γ) (f : α → β) (x : α) : γ :=
+  g (f x)
+
+#check compose -- Note that compose with the type notation requires us to know information about both functions' types, f and g.
+
+def square (x : Nat) : Nat :=
+  x * x
+
+#eval compose Nat Nat Nat double square 3 -- all types are Nat, square 3 first, double the result.
