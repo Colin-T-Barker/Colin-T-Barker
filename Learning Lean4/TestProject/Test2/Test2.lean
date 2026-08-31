@@ -100,3 +100,35 @@ def square (x : Nat) : Nat :=
   x * x
 
 #eval compose Nat Nat Nat double square 3 -- all types are Nat, square 3 first, double the result.
+
+/- Using let as a local definition setter.  -/
+#check let y := 2 + 2; y * y
+#eval  let y := 2 + 2; y * y
+def twice_double (x : Nat) : Nat :=
+  let y := x + x; y * y -- Oh, I like it in here.
+
+#eval twice_double 3
+
+/- Time for variables: -/
+variable (α β γ : Type)
+variable (g : β → γ) (f : α → β) (h : α → α)
+variable (x : α)
+
+def compose1 := g (f x)
+def doTwice := h (h x)
+def doThrice := h (h (h x))
+
+#print compose1
+#print doTwice
+#print doThrice
+
+/- Because the scope of a variable is the entire file, it helps to limit it to sections-/
+section useful
+  variable (α β γ : Type)
+  variable (g : β → γ) (f : α → β) (h : α → α)
+  variable (x : α)
+
+  def compose2 := g (f x)
+  def doTwice1 := h (h x)
+  def doThrice1 := h (h (h x))
+end useful
