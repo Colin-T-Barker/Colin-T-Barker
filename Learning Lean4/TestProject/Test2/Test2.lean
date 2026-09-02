@@ -132,3 +132,35 @@ section useful
   def doTwice1 := h (h x)
   def doThrice1 := h (h (h x))
 end useful
+
+/- A namespace is a place to store lots of local definitions.  I like that. -/
+
+namespace Foo
+  def a : Nat := 5
+  def t (x : Nat) : Nat := x + 7
+
+  def fa : Nat := t a
+  def ffa : Nat := t (t a)
+
+  #check a
+  #check t
+  #check fa
+  #check ffa
+  #check Foo.fa
+  end Foo
+
+-- #check a  -- error
+-- #check f  -- error
+#check Foo.a
+#check Foo.t
+#check Foo.fa
+#check Foo.ffa
+
+open Foo -- This means now I can refer to Foo's definitions without the Foo. prefix
+
+#check a
+#check t
+#check fa
+#check Foo.fa
+
+/- I sometimes think that a namespace is like a preamble in latex -/
