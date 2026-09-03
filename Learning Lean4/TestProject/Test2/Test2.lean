@@ -164,3 +164,25 @@ open Foo -- This means now I can refer to Foo's definitions without the Foo. pre
 #check Foo.fa
 
 /- I sometimes think that a namespace is like a preamble in latex -/
+-- The following is a cartesian product only needing to declare the type once:
+section cartesian_products
+universe u v
+
+def p (α : Type u) (β : α → Type v) (a : α) (b : β a) : (a : α) × β a :=
+  ⟨a, b⟩
+
+def q (α : Type u) (β : α → Type v) (a : α) (b : β a) : Σ a : α, β a :=
+  Sigma.mk a b
+
+def h1 (x : Nat) : Nat :=
+  (p Type (fun α => α) Nat x).2
+
+#check p
+#check q
+#eval h1 5
+
+def h2 (x : Nat) : Nat :=
+  (q Type (fun α => α) Nat x).2
+
+#eval h2 5
+end cartesian_products
