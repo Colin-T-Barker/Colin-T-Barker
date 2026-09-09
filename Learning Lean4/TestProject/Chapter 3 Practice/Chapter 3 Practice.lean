@@ -15,6 +15,7 @@ variable (p q r : Prop)
 #check Implies (And p q) (And q p)
 end first
 
+section second
 structure Proof (p : Prop) : Type where
   proof : p
 
@@ -34,3 +35,33 @@ axiom implies_intro (p q : Prop) :
   (Proof p → Proof q) → Proof (Implies p q)
 
 #check implies_intro -- BTW, "a proof of something" is *also* a type.
+-- Note that t : p is both "t of type p" and also p is a prop whose inhabitant is t.
+end second
+
+section third
+set_option linter.unusedVariables false
+---
+variable {p : Prop}
+variable {q : Prop}
+
+theorem t1 : p → q → p := fun hp : p => fun hq : q => hp
+#print t1
+end third
+
+set_option linter.unusedVariables false
+variable {p : Prop}
+variable {q : Prop}
+theorem th1 : p → q → p :=
+  fun hp : p =>
+  fun hq : q =>
+  show p from hp
+
+theorem the1 (hp : p) (hq : q) : p := hp
+
+axiom hp : p
+
+theorem t2 : q → p := the1 hp
+
+/- There are so many ways to write a theorem.  Let's try the next one:-/
+theorem theo1 : ∀{p q : Prop}, p → q → p :=
+  fun {p q : Prop} (hp : p) (hq : q) => hp
