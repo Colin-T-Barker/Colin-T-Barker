@@ -65,3 +65,19 @@ theorem t2 : q → p := the1 hp
 /- There are so many ways to write a theorem.  Let's try the next one:-/
 theorem theo1 : ∀{p q : Prop}, p → q → p :=
   fun {p q : Prop} (hp : p) (hq : q) => hp
+
+-- Try it with new variables!
+variable (p q r s : Prop)
+
+#check theo1 p q
+#check theo1 r s
+#check theo1 (r → s) (s → r)
+variable (h : r → s)
+
+#check theo1 (r → s) (s → r) h
+
+variable (p q r s : Prop)
+
+theorem tH2 (h₁ : q → r) (h₂ : p → q) : p → r :=
+  fun h₃ : p =>
+  show r from h₁ (h₂ h₃)
