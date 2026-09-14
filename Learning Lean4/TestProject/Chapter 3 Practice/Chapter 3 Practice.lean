@@ -81,3 +81,14 @@ variable (p q r s : Prop)
 theorem tH2 (h₁ : q → r) (h₂ : p → q) : p → r :=
   fun h₃ : p =>
   show r from h₁ (h₂ h₃)
+#check tH2
+
+-- I am running out of dummy variables...ugh.  Time to understand And.intro--
+variable (p q : Prop)
+
+example (hp : p) (hq : q) : p ∧ q := And.intro hp hq
+
+#check fun (hp : p) (hq : q) => And.intro hp hq
+
+example (h : p ∧ q) : q ∧ p :=
+  And.intro (And.right h) (And.left h)
