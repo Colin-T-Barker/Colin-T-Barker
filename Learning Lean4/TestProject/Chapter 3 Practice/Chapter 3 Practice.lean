@@ -92,3 +92,13 @@ example (hp : p) (hq : q) : p ∧ q := And.intro hp hq
 
 example (h : p ∧ q) : q ∧ p :=
   And.intro (And.right h) (And.left h)
+
+-- Trying to prove 'or' using or.elim--
+variable (p q r : Prop)
+
+example (h : p ∨ q) : q ∨ p :=
+  Or.elim h
+    (fun hp : p =>
+      show q ∨ p from Or.intro_right q hp)
+    (fun hq : q =>
+      show q ∨ p from Or.intro_left p hq)
