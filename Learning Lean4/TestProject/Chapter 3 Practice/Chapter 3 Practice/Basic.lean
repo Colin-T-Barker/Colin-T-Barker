@@ -1,4 +1,4 @@
-open Classical
+open Classical -- This is a command that allows us to use classical logic in Lean. It gives us access to the law of excluded middle and other 'classical' reasoning tools.
 
 variable (p : Prop)
 
