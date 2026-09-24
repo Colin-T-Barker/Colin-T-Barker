@@ -20,8 +20,17 @@ example : p ∧ q ↔ q ∧ p :=
     in terms of functions, etc.  I still need better info about what the ''.intro's are.-/
 
 
-example : p ∨ q ↔ q ∨ p := sorry
-
+example : p ∨ q ↔ q ∨ p :=
+    Iff.intro
+        (fun h: p ∨ q =>
+            Or.elim h
+            show q ∨ p from Or.intro_right h--bah, I'm not done.  I need to understand how to go from or.elim to case hp and show q∨p from hp and h, etc.
+        )
+        (fun h: q ∨ p =>
+            have hq : q := h.left
+            have hp : p := h.right
+            show p ∨ q from Or.intro_left hp
+        )
 -- associativity of ∧ and ∨
 example : (p ∧ q) ∧ r ↔ p ∧ (q ∧ r) := sorry
 example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) := sorry
