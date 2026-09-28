@@ -23,26 +23,14 @@ example : p ∧ q ↔ q ∧ p :=
 example : p ∨ q ↔ q ∨ p :=
     Iff.intro -- This just means I'm telling LEAN that we have to prove an iff statement.
         (fun h: p ∨ q => -- start with the LHS of the iff, name it h, and work with that.
-            Or.elim h: -- Begin the case by case proof...given p then q ∨ p,
-            (
-                have hp: p := h.left
-                show q ∨ p from Or.intro_left hp
-            )
-            (
-                have hq: q := Or.inr hq
-                show q ∨ p from Or.intro_right hq
-            )
+            Or.elim h -- Begin the case by case proof...given p then q ∨ p,
+            (fun hp => Or.inr hp) -- So this is the shortest-hand of 3.3.2's second example.  Read that carefully.
+            (fun hq => Or.inl hq)
         )
         (fun h: q ∨ p =>
-            Or.elim h:
-            (
-                have hq: q := h.left
-                show p ∨ q from Or.intro_left hq
-            )
-            (
-                have hp: p := h.right
-                show p ∨ q from Or.intro_right hp
-            )
+            Or.elim h
+            (fun hp => Or.inr hp)
+            (fun hq => Or.inl hq)
         )
 -- associativity of ∧ and ∨
 example : (p ∧ q) ∧ r ↔ p ∧ (q ∧ r) := sorry
