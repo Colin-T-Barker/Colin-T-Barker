@@ -24,16 +24,34 @@ example : p ∨ q ↔ q ∨ p :=
     Iff.intro -- This just means I'm telling LEAN that we have to prove an iff statement.
         (fun h: p ∨ q => -- start with the LHS of the iff, name it h, and work with that.
             Or.elim h -- Begin the case by case proof...given p then q ∨ p,
-            (fun hp => Or.inr hp) -- So this is the shortest-hand of 3.3.2's second example.  Read that carefully.
-            (fun hq => Or.inl hq)
-        )
+            (fun hp => Or.inr hp) -- Or.inr hp means that starting with hp, you get p ∨ hp.
+            (fun hq => Or.inl hq) -- Or.inl hq means that starting with hq, you get hq ∨ q.
+        )  -- we can end the case here because we have checked both subcases that given one side of or you get the full or.
         (fun h: q ∨ p =>
             Or.elim h
             (fun hp => Or.inr hp)
             (fun hq => Or.inl hq)
         )
 -- associativity of ∧ and ∨
-example : (p ∧ q) ∧ r ↔ p ∧ (q ∧ r) := sorry
+example : (p ∧ q) ∧ r ↔ p ∧ (q ∧ r) :=
+    Iff.intro
+        (fun h: (p ∧ q) ∧ r =>
+            have hpq : p ∧ q := h.left
+            have hp : p := hpq.left
+            have hq : q := hpq.right
+            have hr : r := h.right
+            show p ∧ (q ∧ r) from And.intro hp (And.intro hq hr)
+        )
+        (fun h: p ∧ (q ∧ r) =>
+            have hp : p := h.left
+            have hqr : q ∧ r := h.right
+            have hq : q := hqr.left
+            have hr : r := hqr.right
+            show (p ∧ q) ∧ r from And.intro (And.intro hp hq) hr
+        )
+-- I'm pretty pleased with the above proof.  And understanding Or.elim better helps too.
+
+
 example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) := sorry
 
 -- distributivity
