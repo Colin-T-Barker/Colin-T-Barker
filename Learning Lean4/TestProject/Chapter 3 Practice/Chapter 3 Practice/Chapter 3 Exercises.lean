@@ -52,7 +52,26 @@ example : (p ∧ q) ∧ r ↔ p ∧ (q ∧ r) :=
 -- I'm pretty pleased with the above proof.  And understanding Or.elim better helps too.
 
 
-example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) := sorry
+example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
+    Iff.intro
+        (fun h: (p ∨ q) ∨ r =>
+            Or.elim h
+                (fun hr => Or.inr hr) -- I think this is to provide p
+                (fun hqr: q ∨ r =>
+                    Or.elim hqr
+                        (fun hq => Or.inl hq)
+                        (fun hr => Or.inr hr)
+                ) -- I think this is to provide (q ∨ r)
+        )
+        (fun h: p ∨ (q ∨ r) =>
+            Or.elim h
+                (fun hr => Or.inr hr)
+                (fun hpq: p ∨ q =>
+                    Or.elim hpq
+                        (fun hp => Or.inl hp)
+                        (fun hq => Or.inr hq)
+                )
+        ) -- not done.
 
 -- distributivity
 example : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) := sorry
