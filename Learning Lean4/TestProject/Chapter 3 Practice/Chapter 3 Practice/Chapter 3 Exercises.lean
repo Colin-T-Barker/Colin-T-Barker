@@ -24,8 +24,8 @@ example : p ∨ q ↔ q ∨ p :=
     Iff.intro -- This just means I'm telling LEAN that we have to prove an iff statement.
         (fun h: p ∨ q => -- start with the LHS of the iff, name it h, and work with that.
             Or.elim h -- Begin the case by case proof...given p then q ∨ p,
-            (fun hp => Or.inr hp) -- Or.inr hp means that starting with hp, you get p ∨ hp.
-            (fun hq => Or.inl hq) -- Or.inl hq means that starting with hq, you get hq ∨ q.
+            (fun hp => Or.inr hp) -- from h, I have p from Or.inr, this is enough to get q or p, injecting p into the RHS
+            (fun hq => Or.inl hq) -- from h, I have q from Or.inl, this is enough to get q or p, injecting q into the LHS
         )  -- we can end the case here because we have checked both subcases that given one side of or you get the full or.
         (fun h: q ∨ p =>
             Or.elim h
@@ -56,12 +56,11 @@ example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
     Iff.intro
         (fun h: (p ∨ q) ∨ r =>
             Or.elim h
-                (fun hr => Or.inr hr) -- I think this is to provide p
-                (fun hqr: q ∨ r =>
-                    Or.elim hqr
-                        (fun hq => Or.inl hq)
-                        (fun hr => Or.inr hr)
+                (fun hp => Or.inl hp)
+                (fun hq => Or.inl
+                    -- I have r, so hr should give me q ∨ r, but then having q ∨ r should give me or.inr on h
                 ) -- I think this is to provide (q ∨ r)
+                (fun hr: r => Or.inr h) -- from h I have r, so I can get q ∨ r, but that's not enough yet.
         )
         (fun h: p ∨ (q ∨ r) =>
             Or.elim h
