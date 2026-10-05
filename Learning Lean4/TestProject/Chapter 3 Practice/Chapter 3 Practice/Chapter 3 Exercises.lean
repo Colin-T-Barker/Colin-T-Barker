@@ -56,11 +56,12 @@ example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
     Iff.intro
         (fun h: (p ∨ q) ∨ r =>
             Or.elim h
-                (fun hp => Or.inl hp)
-                (fun hq => Or.inl
-                    -- I have r, so hr should give me q ∨ r, but then having q ∨ r should give me or.inr on h
-                ) -- I think this is to provide (q ∨ r)
-                (fun hr: r => Or.inr h) -- from h I have r, so I can get q ∨ r, but that's not enough yet.
+                /-(fun hpq: p ∨ q =>
+                    Or.elim hpq
+                    (fun hp => Or.inr h)-- I'm gteting closer.
+                    (fun hr => Or.inr hr)
+                ) -/
+                (fun hqr: r => Or.inl hqr) -- from h I have r, so I can get q ∨ r, but that's not enough yet.
         )
         (fun h: p ∨ (q ∨ r) =>
             Or.elim h
