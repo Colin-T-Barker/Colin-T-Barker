@@ -56,12 +56,13 @@ example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
     Iff.intro
         (fun h: (p ∨ q) ∨ r =>
             Or.elim h
-                /-(fun hpq: p ∨ q =>
-                    Or.elim hpq
-                    (fun hp => Or.inr h)-- I'm gteting closer.
-                    (fun hr => Or.inr hr)
-                ) -/
-                (fun hqr: r => Or.inl hqr) -- from h I have r, so I can get q ∨ r, but that's not enough yet.
+            (fun hpq: p ∨ q =>
+                Or.elim hpq
+                    (fun hp => Or.inl hp)
+                    (fun hq => Or.inr hq) -- how do I get q ∨ r???
+                    --(fun hqr => Or.inr hqr)
+            )
+            (fun hr => Or.inr hr)
         )
         (fun h: p ∨ (q ∨ r) =>
             Or.elim h
