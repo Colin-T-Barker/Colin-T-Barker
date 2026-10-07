@@ -55,12 +55,14 @@ example : (p ∧ q) ∧ r ↔ p ∧ (q ∧ r) :=
 example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
     Iff.intro
         (fun h: (p ∨ q) ∨ r =>
-            Or.elim h
-            (fun hpq: p ∨ q =>
-                Or.elim hpq
-                    (fun hp => Or.inl hp)
-                    (fun hq => Or.inr hq) -- how do I get q ∨ r???
-                    --(fun hqr => Or.inr hqr)
+            Or.elim h -- I want to check case by case...
+            /-it should start with the left case of the outer Or.elim, which is (p ∨ q),
+            and then handle the right case which is r.-/
+            (fun hpq: p ∨ q => -- this is the left case.  So (p ∨ q) doesn't help yet, I need to break it down further.
+                Or.elim hpq -- To break it down further I'm starting with the case of p.
+                    (fun hp => Or.inl hp) -- from p I can get p ∨ (q ∨ r) by injecting p into the LHS
+                    (fun hq => Or.inl hq) -- from q I can get q ∨ r by injecting q into the LHS of the outer Or. Is this the outer Or? How do I get the outer Or?
+                    (fun hqr => Or.inr hqr)
             )
             (fun hr => Or.inr hr)
         )
