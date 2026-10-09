@@ -53,16 +53,24 @@ example : (p ∧ q) ∧ r ↔ p ∧ (q ∧ r) :=
 
 
 example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
-    Iff.intro
-        (fun h: (p ∨ q) ∨ r =>
-            sorry
+    Iff.intro -- tell Lean I'm doing an iff proof
+        (fun h : (p ∨ q) ∨ r => -- start with the LHS →
+            Or.elim h -- Since this is an ∨ we need to check the cases
+                (fun hpq : p ∨ q => -- The LHS of h's ∨ is (p∨q)
+                    Or.elim hpq -- We need to check the cases of hpq now
+                        (fun hp => Or.inl hp) -- LHS of hpq gives us p which means from p we get p∨ "anything", in this case (q∨r)
+                        (fun hq => Or.inr (Or.inl hq)) /- the new thing here is the way the function is written,
+                        where we're telling it to inject q into the left of q∨r, and then
+                        inject (q ∨ r) into the right of p∨ (q ∨ r).
+                -/
+                )
+                (fun hr : r => Or.inr (Or.inr hr)) /- given r (the RHS of h) we first inject r into
+                (q ∨ r)...that's the blue (), then we inject (q ∨ r) into p ∨ (q ∨ r).
+                -/
         )
-        (fun h: p ∨ (q ∨ r) =>
-            show p ∨ q from h.elim Or.inr -- Hmmmm, new error, but interesting.
-            h.elim
-                (fun hqr => Or.inl hqr) -- the type error here means that I can't get here before I've build p ∨ q
-                (fun hp => Or.inl hp)
-        ) -- not done.
+        (fun h : p ∨ (q ∨ r) =>
+            sorry --do this proof
+        )
 
 -- distributivity
 example : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) := sorry
