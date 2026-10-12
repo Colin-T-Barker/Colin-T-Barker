@@ -69,7 +69,15 @@ example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
                 -/
         )
         (fun h : p ∨ (q ∨ r) =>
-            sorry --do this proof
+            Or.elim h -- Going from the RHS to the LHS that is ← '\ get'
+                (fun hqr : q ∨ r => -- IS THIS WHERE THE PROBLEM IS?
+                    Or.elim hqr -- Still need to get q and r from this
+                        (fun hq => Or.inl (Or.inr hq)) /- have q so we inject q into (p ∨ q)
+                        then inject (p ∨ q) into the left of (p ∨ q) ∨ r -/ --BUT THERE IS A PROBLEM HERE!!!!
+                        (fun hr => Or.inr hr) -- have r, so now I have (p ∨ q) ∨ r.
+                )
+                (fun hp: p => Or.inl (Or.inl hp)) /- for the other side of RHS, have p, so have
+                p ∨ q and then inject p ∨ q into the left of the (p ∨ q) ∨ r. -/
         )
 
 -- distributivity
