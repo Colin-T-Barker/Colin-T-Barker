@@ -70,18 +70,43 @@ example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
         )
         (fun h : p ∨ (q ∨ r) =>
             Or.elim h -- Going from the RHS to the LHS that is ← '\ get'
-                (fun hqr : q ∨ r => -- IS THIS WHERE THE PROBLEM IS?
-                    Or.elim hqr -- Still need to get q and r from this
-                        (fun hq => Or.inl (Or.inr hq)) /- have q so we inject q into (p ∨ q)
-                        then inject (p ∨ q) into the left of (p ∨ q) ∨ r -/ --BUT THERE IS A PROBLEM HERE!!!!
-                        (fun hr => Or.inr hr) -- have r, so now I have (p ∨ q) ∨ r.
-                )
                 (fun hp: p => Or.inl (Or.inl hp)) /- for the other side of RHS, have p, so have
                 p ∨ q and then inject p ∨ q into the left of the (p ∨ q) ∨ r. -/
-        )
+                (fun hqr : (q ∨ r) => -- Apparently it is important to do LHS first for LEAN's or.elim
+                    Or.elim hqr -- Still need to get q and r from this
+                        (fun hq => Or.inl (Or.inr hq)) /- have q so we inject q into (p ∨ q)
+                        then inject (p ∨ q) into the left of (p ∨ q) ∨ r -/
+                        (fun hr => Or.inr hr) -- have r, so now I have (p ∨ q) ∨ r.
+                )
+        ) -- the lessons and keys here are: or.elim goes left to right, and inception injections.
 
 -- distributivity
-example : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) := sorry
+example : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
+    Iff.intro
+        (fun h: p ∧ (q ∨ r) =>
+            have hp: p := h.left
+            have hqr: q ∨ r := h.right
+            Or.elim hqr
+                (fun hq => Or.inl (And.intro hp hq)) /- inject into the left of the '↔ ∨' statement
+                (p∧q) which comes from having both p and q gives p∧q from and.intro.-/
+                (fun hr => Or.inr (And.intro hp hr))
+        )
+        (fun h: (p ∧ q) ∨ (p ∧ r) =>
+            Or.elim h
+                (fun hpq =>
+                    have hp: p := hpq.left
+                    have hq: q := hpq.right
+                    show (p ∧ (q ∨ r)) from And.intro hp (Or.inl hq) -- comment here.
+                )
+                (fun hpr =>
+                    have hp: p := hpr.left
+                    have hr: r := hpr.right
+                    show (p ∧ (q ∨ r)) from And.intro hp (Or.inr hr)
+                )
+        )
+
+
+
 example : p ∨ (q ∧ r) ↔ (p ∨ q) ∧ (p ∨ r) := sorry
 
 -- other properties
