@@ -96,7 +96,11 @@ example : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
                 (fun hpq =>
                     have hp: p := hpq.left
                     have hq: q := hpq.right
-                    show (p ∧ (q ∨ r)) from And.intro hp (Or.inl hq) -- comment here.
+                    show (p ∧ (q ∨ r)) from And.intro hp (Or.inl hq) /- from hp we get p ∧ something.
+                To have LEAN read p∧ (something) we need to use And.intro hp.  The (something)
+                is q ∨ r, and we have q from hq, so we inject q into the left of q ∨ r using Or.inl hq.
+                This gives us the full LHS of the '↔' statement, regardless of r's status.
+                -/
                 )
                 (fun hpr =>
                     have hp: p := hpr.left
@@ -105,9 +109,19 @@ example : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
                 )
         )
 
-
-
-example : p ∨ (q ∧ r) ↔ (p ∨ q) ∧ (p ∨ r) := sorry
+example : p ∨ (q ∧ r) ↔ (p ∨ q) ∧ (p ∨ r) :=
+    Iff.intro -- does iff go LHS to RHS too like Or.elim?
+        (fun h: p ∨ (q ∧ r) =>
+            Or.elim h
+                (fun hp: p =>
+                    And.intro (Or.inl hp) (Or.inl hp)
+                )
+                (fun hqr: q ∧ r =>
+                    have hq: q := hqr.left
+                    have hr: r := hqr.right
+                    And.intro (Or.inr hq) (Or.inr hr)
+                )
+        )--now to the other side of the iff.
 
 -- other properties
 example : (p → (q → r)) ↔ (p ∧ q → r) := sorry
