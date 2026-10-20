@@ -122,9 +122,29 @@ example : p ∨ (q ∧ r) ↔ (p ∨ q) ∧ (p ∨ r) :=
                     And.intro (Or.inr hq) (Or.inr hr)
                 )
         )--now to the other side of the iff.
+        (fun h: (p ∨ q) ∧ (p ∨ r) =>
+            have hpq: p ∨ q := h.left -- we are dealing with an "and" so 'haves' are used
+            have hpr: p ∨ r := h.right
+            Or.elim hpq -- we need to breakdown each or to show the LHS of the iff
+                (fun hp: p => Or.inl hp)
+                (fun hq: q => -- I can't just get the LHS from q, so I need to utilize hpr
+                    Or.elim hpr
+                        (fun hp: p => Or.inl hp) -- in this case we get p again and are done
+                        (fun hr: r => Or.inr (And.intro hq hr)) /- I have q from hq, r from hr
+                        so I build q∧r by And.intro hq hr, and then inject that into the or.-/
+                )
+        )
 
 -- other properties
-example : (p → (q → r)) ↔ (p ∧ q → r) := sorry
+example : (p → (q → r)) ↔ (p ∧ q → r) :=
+    Iff.intro -- so iff, but now we also have implications.  How does this work?
+        (fun h: (p → (q → r)) =>
+            /-The rules are that if h is true, then those cases are whenever either p is false
+            or q is false.  Or q and p are true and r is also true.-/
+        )
+
+
+
 example : ((p ∨ q) → r) ↔ (p → r) ∧ (q → r) := sorry
 example : ¬(p ∨ q) ↔ ¬p ∧ ¬q := sorry
 example : ¬p ∨ ¬q → ¬(p ∧ q) := sorry
