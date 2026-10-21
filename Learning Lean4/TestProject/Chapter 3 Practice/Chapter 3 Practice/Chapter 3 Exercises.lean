@@ -140,7 +140,20 @@ example : (p → (q → r)) ↔ (p ∧ q → r) :=
     Iff.intro -- so iff, but now we also have implications.  How does this work?
         (fun h: (p → (q → r)) =>
             /-The rules are that if h is true, then those cases are whenever either p is false
-            or q is false.  Or q and p are true and r is also true.-/
+            or q is false.  Or q and p are true and r is also true.
+            Note that if p or q is false, then p∧q is false, so p∧q→r holds.
+            So we really are responsible for checking when we have both p and q, then we must get r.-/
+            fun hpq: p ∧ q => -- Suppose p∧ q is true
+                have hp: p := hpq.left -- then p is true
+                have hq: q := hpq.right -- then q is true
+                show r from h hp hq -- since p and q are true, AND h is true, then r cannot be false.
+        -- Do I not ever have to worry about p or q being false?  I guess not.
+        )
+        (fun h: (p ∧ q → r) => -- suppose h is true
+            fun hp: p => /- We get h is true either vacuously (which we don't care about in LEAN)
+                        or we get that p∧ q is ture.-/
+                fun hq: q =>
+                    show r from h (And.intro hp hq)
         )
 
 
