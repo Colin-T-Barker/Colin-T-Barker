@@ -152,13 +152,24 @@ example : (p → (q → r)) ↔ (p ∧ q → r) :=
         (fun h: (p ∧ q → r) => -- suppose h is true
             fun hp: p => /- We get h is true either vacuously (which we don't care about in LEAN)
                         or we get that p∧ q is ture.-/
-                fun hq: q =>
-                    show r from h (And.intro hp hq)
+                fun hq: q => /- since we have extracted p, we also have to extract q,
+                    then our next line should be to show that r must be true.
+                    If r is true, that's enough.
+                    -/
+                    show r from h (And.intro hp hq) /- we have p and q, so we can inject them into the RHS
+                    of the iff, and so that gives us p → q. -/
+        ) -- It is unclear to me how to guarantee the implication.  I need to work more.
+
+example : ((p ∨ q) → r) ↔ (p → r) ∧ (q → r) := -- The intention is for no CoPilot for this one.
+    Iff.intro
+        (fun h: ((p ∨ q) → r) =>
+            sorry -- I have two statements, within an and.  So let's figure that out.
+            /-So in this case the vacuous case matters.  Hmmmmmm-/
+        )
+        (fun h:  (p → r) ∧ (q → r) =>
+            sorry
         )
 
-
-
-example : ((p ∨ q) → r) ↔ (p → r) ∧ (q → r) := sorry
 example : ¬(p ∨ q) ↔ ¬p ∧ ¬q := sorry
 example : ¬p ∨ ¬q → ¬(p ∧ q) := sorry
 example : ¬(p ∧ ¬p) := sorry
