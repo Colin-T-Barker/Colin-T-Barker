@@ -151,7 +151,7 @@ example : (p → (q → r)) ↔ (p ∧ q → r) :=
         )
         (fun h: (p ∧ q → r) => -- suppose h is true
             fun hp: p => /- We get h is true either vacuously (which we don't care about in LEAN)
-                        or we get that p∧ q is ture.-/
+                        or we get that p∧ q is true.-/
                 fun hq: q => /- since we have extracted p, we also have to extract q,
                     then our next line should be to show that r must be true.
                     If r is true, that's enough.
@@ -163,8 +163,9 @@ example : (p → (q → r)) ↔ (p ∧ q → r) :=
 example : ((p ∨ q) → r) ↔ (p → r) ∧ (q → r) := -- The intention is for no CoPilot for this one.
     Iff.intro
         (fun h: ((p ∨ q) → r) =>
-            sorry -- I have two statements, within an and.  So let's figure that out.
-            /-So in this case the vacuous case matters.  Hmmmmmm-/
+            /-So ∃2 cases, 1) (p∨q) is false...in  which case both p AND q are false.
+            It follows that the RHS must hold.
+            2) (p∨q) is true AND r is true.  Since r is true, the RHS holds vacuously. -/
         )
         (fun h:  (p → r) ∧ (q → r) =>
             sorry
