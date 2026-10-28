@@ -163,6 +163,12 @@ example : (p → (q → r)) ↔ (p ∧ q → r) :=
 example : ((p ∨ q) → r) ↔ (p → r) ∧ (q → r) := -- The intention is for no CoPilot for this one.
     Iff.intro
         (fun h: ((p ∨ q) → r) =>
+            (fun hp: p =>
+                (fun hq: q =>
+                    show r from h (Or.inl hp),
+                    show r from h (Or.inl hq)
+                )
+            )
             /-So ∃2 cases, 1) (p∨q) is false...in  which case both p AND q are false.
             It follows that the RHS must hold.
             2) (p∨q) is true AND r is true.  Since r is true, the RHS holds vacuously. -/
