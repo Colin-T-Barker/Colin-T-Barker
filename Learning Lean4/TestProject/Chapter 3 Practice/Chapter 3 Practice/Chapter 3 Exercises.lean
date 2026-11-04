@@ -172,10 +172,14 @@ example : ((p ∨ q) → r) ↔ (p → r) ∧ (q → r) := -- The intention is f
             2) (p∨q) is true AND r is true.  Since r is true, the RHS holds vacuously. -/
         )
         (fun h: (p → r) ∧ (q → r) =>
-            have hpr: p → r := h.left
-            have hqr: q → r := h.right
-            show ((p ∨ q) → r) from fun hpq: (p ∨ q) =>
-                --(fun hr: r => hr)-- this ain't right.  Study more.
+            /-have hpr: p → r := h.left
+            have hqr: q → r := h.right-/
+            show ((p ∨ q) → r) from
+                (fun hpq: p ∨ q =>
+                    Or.elim hpq
+                        (fun hp: p => (Or.inr hp) hpq)
+                        (fun hq: p => Or.inr hq) --didn't work yet...
+                )
         )
 
 example : ¬(p ∨ q) ↔ ¬p ∧ ¬q := sorry
